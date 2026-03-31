@@ -3,6 +3,12 @@ metadata:
   name: ansible-demo
 components:
   - name: tooling-container
+    # --- BEGIN nested podman overrides ---
+    # Required for rootless podman with user namespaces.
+    # Dev Spaces 3.25+/OCP 4.20+ operators may auto-inject these, but older versions
+    # and clusters with custom SCCs (e.g. nested-podman-scc) require them explicitly.
+    # Without these, the pod fails SCC validation with:
+    #   "hostUsers must be set to false" / SETUID/SETGID capabilities not allowed
     attributes:
       pod-overrides:
         metadata:
@@ -13,6 +19,7 @@ components:
       container-overrides:
         securityContext:
           procMount: Unmasked
+    # --- END nested podman overrides ---
     container:
       image: ghcr.io/ansible/ansible-devspaces:latest
       memoryRequest: 256M
