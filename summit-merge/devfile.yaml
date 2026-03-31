@@ -12,6 +12,8 @@ components:
       env:
         - name: "ANSIBLE_COLLECTIONS_PATH"
           value: "~/.ansible/collections:/usr/share/ansible/collections:/projects/ansible-devspaces-demo/collections"
+        - name: VSCODE_DEFAULT_WORKSPACE
+          value: /projects/ansible-devspaces-summit/devspaces.code-workspace
 commands:
   - id: molecule-create
     exec:
