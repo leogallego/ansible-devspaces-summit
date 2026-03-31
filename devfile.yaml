@@ -1,61 +1,92 @@
-## Based on https://github.com/cgruver/ocp-4-18-nested-container-tech-preview/blob/main/devfile.yaml
-
-schemaVersion: 2.2.0
-attributes:
-  controller.devfile.io/storage-type: per-workspace
+schemaVersion: 2.2.2
 metadata:
-  name: ansible-devspaces-example
+  name: ansible-demo
 components:
-  - name: dev-tools
-    attributes:
-      pod-overrides:
-        metadata:
-          annotations:
-            # Ask for /dev/fuse and /dev/net/tun to be mapped into this Pod
-            io.kubernetes.cri-o.Devices: "/dev/fuse,/dev/net/tun"
-        spec:
-          # Instruct the container runtime to create a new user namespace for the containers in this Pod.
-          hostUsers: false
-      container-overrides:
-        securityContext:
-          # Ask for an unmasked /proc to be available to this container
-          procMount: Unmasked
+  - name: tooling-container
     container:
-      image: quay.io/leogallego/ansible-devspaces-summit:latest
-      mountSources: true
-      sourceMapping: /projects
-      cpuLimit: 4000m
+      image: ghcr.io/ansible/ansible-devspaces:latest
+      memoryRequest: 256M
+      memoryLimit: 6Gi
       cpuRequest: 250m
-      memoryLimit: 4Gi
-      memoryRequest: 128Mi
+      cpuLimit: 2000m
       env:
+        - name: "ANSIBLE_COLLECTIONS_PATH"
+          value: "~/.ansible/collections:/usr/share/ansible/collections:/projects/ansible-devspaces-demo/collections"
         - name: VSCODE_DEFAULT_WORKSPACE
           value: /projects/ansible-devspaces-summit/devspaces.code-workspace
-        - name: PATH
-          value: /projects/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-  - name: prep-workspace
-    container:
-      args:
-        - '-c'
-        - >-
-          mkdir -p /projects/bin && cp /usr/bin/oc /projects/bin/oc && cp /usr/bin/kubectl /projects/bin/kubectl && if [[ -f ${HOME}/.kube/config ]]; then rm ${HOME}/.kube/config; fi
-      command:
-        - /bin/bash
-      image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
-      mountSources: true
-      sourceMapping: /projects
-      memoryRequest: 128Mi
-      memoryLimit: 256Mi
-      cpuRequest: 10m
-      cpuLimit: 200m
-      env:
-      - name: HOME
-        value: "/projects/home"
 commands:
-  - apply:
-      component: prep-workspace
-      label: Pre Start Prep
-    id: prep-workspace
+  - id: molecule-create
+    exec:
+      label: "1.Molecule: start a test pod for the automation"
+      commandLine: "source $HOME/.bashrc && molecule create"
+      workingDir: ${PROJECTS_ROOT}/ansible-devspaces-demo/collections/ansible_collections/sample_namespace/sample_collection/extensions
+      group:
+        kind: run
+        isDefault: true
+      component: tooling-container
+
+  - id: molecule-list
+    exec:
+      label: "2.Molecule: view the test instance that was created"
+      commandLine: "source $HOME/.bashrc && molecule list"
+      workingDir: ${PROJECTS_ROOT}/ansible-devspaces-demo/collections/ansible_collections/sample_namespace/sample_collection/extensions
+      group:
+        kind: run
+        isDefault: true
+      component: tooling-container
+
+  - id: molecule-converge
+    exec:
+      label: "3.Molecule: apply the role to the pod"
+      commandLine: "source $HOME/.bashrc && molecule converge"
+      workingDir: ${PROJECTS_ROOT}/ansible-devspaces-demo/collections/ansible_collections/sample_namespace/sample_collection/extensions
+      group:
+        kind: run
+        isDefault: true
+      component: tooling-container
+
+  - id: molecule-verify
+    exec:
+      label: "4.Molecule: run the verification against the test pod"
+      commandLine: "source $HOME/.bashrc && molecule verify"
+      workingDir: ${PROJECTS_ROOT}/ansible-devspaces-demo/collections/ansible_collections/sample_namespace/sample_collection/extensions
+      group:
+        kind: run
+        isDefault: true
+      component: tooling-container
+
+  - id: molecule-destroy
+    exec:
+      label: "5.Molecule: reset the test pod back to a fresh instance"
+      commandLine: "source $HOME/.bashrc && molecule destroy"
+      workingDir: ${PROJECTS_ROOT}/ansible-devspaces-demo/collections/ansible_collections/sample_namespace/sample_collection/extensions
+      group:
+        kind: run
+        isDefault: true
+      component: tooling-container
+
+  - id: molecule-test
+    exec:
+      label: "6.Molecule: run the full molecule test"
+      commandLine: "source $HOME/.bashrc && molecule test"
+      workingDir: ${PROJECTS_ROOT}/ansible-devspaces-demo/collections/ansible_collections/sample_namespace/sample_collection/extensions
+      group:
+        kind: run
+        isDefault: true
+      component: tooling-container
+
+  - id: ansible-navigator
+    exec:
+      label: "Ansible-Navigator: Start ansible-navigator"
+      commandLine: |
+        if [ ! -d "$HOME/.cache/ansible-navigator" ]; then
+          mkdir -p "$HOME/.cache/ansible-navigator"
+        fi
+        NAVIGATOR_DATA=$(python3 -c "import ansible_navigator.data; import pathlib; print(pathlib.Path(ansible_navigator.data.__file__).parent)")
+        cp "${NAVIGATOR_DATA}/catalog_collections.py" "$HOME/.cache/ansible-navigator"
+        ansible-navigator --ee false
+      workingDir: ${PROJECTS_ROOT}/ansible-devspaces-demo
+      component: tooling-container
 events:
-  preStart:
-    - prep-workspace
+  preStop:
+    - "molecule-destroy"
