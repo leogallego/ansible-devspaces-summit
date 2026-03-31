@@ -64,6 +64,7 @@
         "openshiftToolkit.showWelcomePage": false,
         "openshiftToolkit.searchForToolsInPath": true,
         "openshiftToolkit.execMaxBufferLength": 10,
-        "python.useEnvironmentsExtension": true
+        "python.useEnvironmentsExtension": true,
+        "security.workspace.trust.enabled": false
     }
 }
