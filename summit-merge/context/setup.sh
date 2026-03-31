@@ -40,7 +40,7 @@ alternatives --set python3 "/usr/bin/python${PYV}"
 alternatives --install /usr/bin/pip3 pip3 "/usr/bin/pip${PYV}" 100
 alternatives --set pip3 "/usr/bin/pip${PYV}"
 
-"/usr/bin/python${PYV}" -m pip install --only-binary :all: --root-user-action=ignore "$(ls -1 ./*.whl)[server]" -r requirements.txt
+"/usr/bin/python${PYV}" -m pip install --no-cache-dir --root-user-action=ignore -r requirements.txt
 
 ansible-galaxy collection install -r requirements.yml
 
