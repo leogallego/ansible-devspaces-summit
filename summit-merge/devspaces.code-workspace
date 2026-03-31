@@ -11,8 +11,7 @@
             "ms-python.python",
             "redhat.ansible",
             "redhat.vscode-openshift-connector",
-            "ms-python.black-formatter",
-            "sst-dev.opencode"
+            "ms-python.black-formatter"
         ]
     },
     "settings": {
