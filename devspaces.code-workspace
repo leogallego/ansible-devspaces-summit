@@ -11,11 +11,15 @@
             "ms-python.python",
             "redhat.ansible",
             "redhat.vscode-openshift-connector",
-            "ms-python.black-formatter"
+            "ms-python.black-formatter",
+            "editorconfig.editorconfig"
         ]
     },
     "settings": {
         "editor.wordWrap": "on",
+        "editor.rulers": [120, 160],
+        "files.eol": "\n",
+        "yaml.customTags": ["!vault"],
         "files.associations": {
             "**/playbooks/**/*.yml": "ansible",
             "**/playbooks/**/*.yaml": "ansible",
