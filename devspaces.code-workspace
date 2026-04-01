@@ -56,7 +56,6 @@
         "[python]": {
             "editor.defaultFormatter": "ms-python.black-formatter"
         },
-        "redhat.telemetry.enabled": true,
         "ansible.executionEnvironment.containerEngine": "podman",
         "git.autofetch": true,
         "ansible.lightspeed.enabled": false,
@@ -65,6 +64,8 @@
         "openshiftToolkit.searchForToolsInPath": true,
         "openshiftToolkit.execMaxBufferLength": 10,
         "python.useEnvironmentsExtension": true,
-        "security.workspace.trust.enabled": false
+        "security.workspace.trust.enabled": false,
+        "git.openRepositoryInParentFolders": "never",
+        "redhat.telemetry.enabled": false
     }
 }
