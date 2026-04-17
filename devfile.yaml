@@ -24,6 +24,7 @@ components:
               - SETUID
               - SETGID
               - AUDIT_WRITE
+              - DAC_READ_SEARCH
     # --- END nested podman overrides ---
     container:
       image: ghcr.io/ansible/ansible-devspaces:v26.4.4
