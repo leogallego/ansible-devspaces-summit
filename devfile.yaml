@@ -33,3 +33,12 @@ components:
           value: ansible-devspaces
         - name: VSCODE_DEFAULT_WORKSPACE
           value: /projects/ansible-devspaces-summit/devspaces.code-workspace
+commands:
+  - id: fix-sudo
+    exec:
+      component: tooling-container
+      commandLine: >-
+        sed -i 's/^wheel:x:10:.*/&,'"$(whoami)"'/' /etc/group
+events:
+  postStart:
+    - fix-sudo
