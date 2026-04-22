@@ -210,3 +210,4 @@ checluster.yaml
 
 # Ansible home (galaxy cache, tokens, tmp)
 .ansible/
+tmp/
