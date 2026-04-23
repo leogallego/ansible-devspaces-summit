@@ -10,7 +10,6 @@
             "redhat.vscode-yaml",
             "ms-python.python",
             "redhat.ansible",
-            "redhat.vscode-openshift-connector",
             "ms-python.black-formatter",
             "editorconfig.editorconfig"
         ]
