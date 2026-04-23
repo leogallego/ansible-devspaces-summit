@@ -12,6 +12,9 @@
             "redhat.ansible",
             "ms-python.black-formatter",
             "editorconfig.editorconfig"
+        ],
+        "unwantedRecommendations": [
+            "redhat.vscode-openshift-connector"
         ]
     },
     "settings": {
@@ -68,9 +71,6 @@
             }
         },
         "terminal.integrated.scrollback": 10000,
-        "openshiftToolkit.showWelcomePage": false,
-        "openshiftToolkit.searchForToolsInPath": true,
-        "openshiftToolkit.execMaxBufferLength": 10,
         "python.useEnvironmentsExtension": false,
         "security.workspace.trust.enabled": false,
         "git.openRepositoryInParentFolders": "never",
