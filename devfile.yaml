@@ -12,6 +12,8 @@ components:
       env:
         - name: SHELL
           value: /bin/bash
+        - name: PROMPT_COMMAND
+          value: 'PS1="${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV)) }${PWD#/projects/ansible-dev-tools-workspace/} \$ "'
         - name: ANSIBLE_HOME
           value: /projects/ansible-dev-tools-workspace/.ansible
         - name: HOSTNAME
