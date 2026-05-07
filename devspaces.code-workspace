@@ -1,8 +1,8 @@
 {
     "folders": [
         {
-            "name": "ansible-devspaces-summit",
-            "path": "/projects/ansible-devspaces-summit"
+            "name": "ansible-dev-tools-workspace",
+            "path": "/projects/ansible-dev-tools-workspace"
         }
     ],
     "extensions": {
@@ -10,9 +10,11 @@
             "redhat.vscode-yaml",
             "ms-python.python",
             "redhat.ansible",
-            "redhat.vscode-openshift-connector",
             "ms-python.black-formatter",
             "editorconfig.editorconfig"
+        ],
+        "unwantedRecommendations": [
+            "redhat.vscode-openshift-connector"
         ]
     },
     "settings": {
@@ -21,34 +23,24 @@
         "files.eol": "\n",
         "yaml.customTags": ["!vault"],
         "files.associations": {
-            "**/playbooks/**/*.yml": "ansible",
-            "**/playbooks/**/*.yaml": "ansible",
-            "**/roles/**/*.yml": "ansible",
-            "**/roles/**/*.yaml": "ansible",
+            "**/galaxy.yml": "ansible",
+            "**/galaxy.yaml": "ansible",
+            "**/execution-environment.yml": "ansible",
+            "**/execution-environment.yaml": "ansible",
+            "**/molecule.yml": "ansible",
+            "**/molecule.yaml": "ansible",
+            "**/requirements.yml": "ansible",
+            "**/requirements.yaml": "ansible",
             "**/tasks/**/*.yml": "ansible",
-            "**/tasks/**/*.yaml": "ansible",
             "**/handlers/**/*.yml": "ansible",
-            "**/handlers/**/*.yaml": "ansible",
-            "**/meta/*.yml": "ansible",
-            "**/meta/*.yaml": "ansible",
-            "**/defaults/*.yml": "ansible",
-            "**/defaults/*.yaml": "ansible",
-            "**/vars/**/*.yml": "ansible",
-            "**/vars/**/*.yaml": "ansible",
-            "**/collections/**/*.yml": "ansible",
-            "**/collections/**/*.yaml": "ansible",
-            "**/site.yml": "ansible",
-            "**/site.yaml": "ansible"
+            "**/defaults/**/*.yml": "ansible",
+            "**/vars/**/*.yml": "ansible"
         },
-        "ansible.ansible.path": "/usr/local/bin/ansible",
-        "ansible.python.interpreterPath": "/usr/bin/python3",
         "ansible.ansible.useFullyQualifiedCollectionNames": true,
-        "ansible.ansibleNavigator.path": "/usr/local/bin/ansible-navigator",
         "ansible.completion.provideModuleOptionAliases": true,
         "ansible.completion.provideRedirectModules": true,
         "ansible.validation.enabled": true,
         "ansible.validation.lint.enabled": true,
-        "ansible.validation.lint.path": "/usr/local/bin/ansible-lint",
         "files.trimTrailingWhitespace": true,
         "files.trimFinalNewlines": true,
         "files.insertFinalNewline": true,
@@ -59,10 +51,16 @@
         "ansible.executionEnvironment.containerEngine": "podman",
         "git.autofetch": true,
         "ansible.lightspeed.enabled": false,
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+            "bash": {
+                "path": "/bin/bash"
+            },
+            "zsh": {
+                "path": "/bin/zsh"
+            }
+        },
         "terminal.integrated.scrollback": 10000,
-        "openshiftToolkit.showWelcomePage": false,
-        "openshiftToolkit.searchForToolsInPath": true,
-        "openshiftToolkit.execMaxBufferLength": 10,
         "python.useEnvironmentsExtension": false,
         "security.workspace.trust.enabled": false,
         "git.openRepositoryInParentFolders": "never",

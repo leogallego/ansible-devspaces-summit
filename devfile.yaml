@@ -1,35 +1,26 @@
 schemaVersion: 2.2.2
 metadata:
-  name: ansible-devspaces-summit
+  name: ansible-dev-tools-workspace
 components:
   - name: tooling-container
-    # --- BEGIN nested podman overrides ---
-    # Required for rootless podman with user namespaces.
-    # Dev Spaces 3.25+/OCP 4.20+ operators may auto-inject these, but older versions
-    # and clusters with custom SCCs (e.g. nested-podman-scc) require them explicitly.
-    # Without these, the pod fails SCC validation with:
-    #   "hostUsers must be set to false" / SETUID/SETGID capabilities not allowed
-    attributes:
-      pod-overrides:
-        metadata:
-          annotations:
-            io.kubernetes.cri-o.Devices: "/dev/fuse,/dev/net/tun"
-        spec:
-          hostUsers: false
-      container-overrides:
-        securityContext:
-          procMount: Unmasked
-    # --- END nested podman overrides ---
     container:
-      image: ghcr.io/ansible/ansible-devspaces:v26.4.4
+      image: image-registry.openshift-image-registry.svc:5000/openshift/ansible-devspaces:v26.4.5
       memoryRequest: 2Gi
       memoryLimit: 4Gi
       cpuRequest: 500m
-      cpuLimit: 2000m
+      cpuLimit: 1000m
       env:
+        - name: SHELL
+          value: /bin/bash
+        - name: PROMPT_COMMAND
+          value: 'PS1="${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV)) }${PWD#/projects/ansible-dev-tools-workspace/} \$ "'
         - name: ANSIBLE_HOME
-          value: /projects/ansible-devspaces-summit/.ansible
+          value: /projects/ansible-dev-tools-workspace/.ansible
         - name: HOSTNAME
           value: ansible-devspaces
         - name: VSCODE_DEFAULT_WORKSPACE
-          value: /projects/ansible-devspaces-summit/devspaces.code-workspace
+          value: /projects/ansible-dev-tools-workspace/devspaces.code-workspace
+        - name: ADT_CONTAINER_ENGINE
+          value: podman
+        - name: ANSIBLE_NAVIGATOR_CONFIG
+          value: /projects/ansible-dev-tools-workspace/.ansible-navigator.yml
